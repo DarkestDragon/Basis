@@ -81,7 +81,7 @@ class PrintingWindow():
 			must_print -= 1
 			printed += 1
 			# print a page here
-			self.printDMC(z, str(printed))
+			self.printDMC(self.z, str(printed))
 			#Tranziting new values to widgets
 			entry1.set_text(str(printed))
 			entry2.set_text(str(must_print))
@@ -105,7 +105,7 @@ class PrintingWindow():
 		self.z.setup( direct_thermal=True, label_height=(200,2), label_width=200 )
 		testNum = entry1.get_text()
 		printer_port = str(entry2.get_active_text())
-		self.printDMC(z, testNum)
+		self.printDMC(self.z, testNum)
 		entry1.set_text("")
 		Gtk.main_iteration_do(False)
 		
