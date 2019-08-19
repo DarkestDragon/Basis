@@ -1,27 +1,36 @@
 <?php
 	
-	/****TRIANGLE*****/
-	class Triangle{
+	/****OBJECT*******/
+	class Object_Base{
 		protected $id = 0;
+		public function __construct(){}
+		public function echo_id(){}
+		public function change_id(int $new_id, bool $echo_new = false){
+			$this->id = $new_id;
+			if($echo_new)
+				$this->echo_id();
+			return;
+		}
+		public function get_area(){}
+		public function get_values() : string{}
+	}
+	/*****************/
+	
+	/****TRIANGLE*****/
+	class Triangle extends Object_Base{
 		private $sides = [0, 0, 0];
 		
 		public function __construct(int $leg1, int $leg2, int $angle, int $id_num = 0){
 			$this->id = $id_num;
 			$this->sides[0] = $leg1;
 			$this->sides[1] = $leg2;
-			$this->sides[2] = $angle;//the 3rd variable is angle(rads) between legs
+			$this->sides[2] = $angle;//the 3rd variable is angle(grad) between legs
 		}
 		public function get_area(){
 			return ($this->sides[0] * $this->sides[1] * sin(deg2rad($this->sides[2]))) / 2;
 		}
 		public function echo_id(){
 			echo "Triangle ID: ".$this->id."\n";
-			return;
-		}
-		public function change_id(int $new_id, bool $echo_new = false){
-			$this->id = $new_id;
-			if($echo_new)
-				$this->echo_id();
 			return;
 		}
 		public function get_values() : string{
@@ -38,7 +47,7 @@
 	/*****************/
 	
 	/****RECTANGLE****/
-	class Rectangle extends Triangle{
+	class Rectangle extends Object_Base{
 		private $sides = [0, 0];
 		
 		public function __construct(int $side_x, int $side_y, int $id_num = 0){
@@ -67,8 +76,7 @@
 	/*****************/
 	
 	/****CIRCLE******/
-	class Circle{
-		private $id = 0;
+	class Circle extends Object_Base{
 		private $rad = 0;
 		const PI = 3.14;
 		
@@ -81,12 +89,6 @@
 		}
 		public function echo_id(){
 			echo "Circle ID: ".$this->id."\n";
-			return;
-		}
-		public function change_id(int $new_id, bool $echo_new = false){
-			$this->id = $new_id;
-			if($echo_new)
-				$this->echo_id();
 			return;
 		}
 		public function get_values() : string{
