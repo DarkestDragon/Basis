@@ -1,4 +1,5 @@
 <?php
+	
 	/****TRIANGLE*****/
 	class Triangle{
 		protected $id = 0;
@@ -8,10 +9,10 @@
 			$this->id = $id_num;
 			$this->sides[0] = $leg1;
 			$this->sides[1] = $leg2;
-			$this->sides[2] = sin(deg2rad($angle));//the 3rd variable is sin(angle(rads)) between legs
+			$this->sides[2] = $angle;//the 3rd variable is angle(rads) between legs
 		}
 		public function get_area(){
-			return ($this->sides[0] * $this->sides[1] * $this->sides[2]) / 2;
+			return ($this->sides[0] * $this->sides[1] * sin(deg2rad($this->sides[2]))) / 2;
 		}
 		public function echo_id(){
 			echo "Triangle ID: ".$this->id."\n";
@@ -38,13 +39,12 @@
 	
 	/****RECTANGLE****/
 	class Rectangle extends Triangle{
-		//private $id = 0;
 		private $sides = [0, 0];
 		
 		public function __construct(int $side_x, int $side_y, int $id_num = 0){
 			$this->id = $id_num;
-			$this->side[0] = $side_x;
-			$this->side[1] = $side_y;
+			$this->sides[0] = $side_x;
+			$this->sides[1] = $side_y;
 		}
 		public function get_area(){
 			return $this->sides[0] * $this->sides[1];
@@ -70,14 +70,14 @@
 	class Circle{
 		private $id = 0;
 		private $rad = 0;
-		private const PI = 3.14;
+		const PI = 3.14;
 		
 		public function __construct(int $radius, int $id_num = 0){
 			$this->id = $id_num;
 			$this->rad = $radius;
 		}
 		public function get_area(){
-			return PI * (($this->rad) ** 2);
+			return Circle::PI * (($this->rad) ** 2);
 		}
 		public function echo_id(){
 			echo "Circle ID: ".$this->id."\n";

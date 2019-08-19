@@ -9,7 +9,6 @@
 		$arr = ["Triangle", "Rectangle", "Circle"];
 		$index = rand(0, count($arr) - 1);
 		$class_name = $arr[$index];
-		echo "Creating $class_name\n";
 		$id_num++;
 		switch($class_name){
 			case "Triangle":
@@ -40,7 +39,7 @@
 				return false;
 			}
 			if($i == $arr_size - 1)
-				fwrite($fhandl, "\a");//defines the end of data
+				fwrite($fhandl, "\\");//defines the end of data
 		}
 		fclose($fhandl);
 		return true;
@@ -49,28 +48,62 @@
 	
 	/****PARSEVAL*****/
 	//parses value in string, may return "int" or "float" type value
-	function parseval(string $str, int $offset){
+	function parseval(array $str, int $offset){
+		$frac_part = 0;//fractional part
+		$int_part = 0;//integer part
+		$float_flag = false;//if true then parsed value, have a "float" type
+		$rate = 1;
+		$neg_flag = false;//if integer part of negative value == 0, this var will be true
+		$was_minus = false;//created to prevent extra value's sign flips
 		
+		for($i = $offset; $i >= 0; $i--){
+			if(is_numeric($str[$i])){
+				(!$float_flag) ? $frac_part += (int)$str[$i] * $rate : $int_part += (int)$str[$i] * $rate;
+			}
+			else if($str[$i] === '.'){
+				$float_flag = true;
+				$rate = 1;
+			}
+			else if($str[$i] === '-' && !$was_minus){
+				(!$float_flag) ? $frac_part = -$frac_part : $int_part = -$int_part;
+				if(!$float_flag)
+					return $frac_part;
+				if($int_part == 0)
+					$neg_flag = true;
+				$was_minus = true;
+			}
+			else{//if not a number or dot, or minus sign - return value
+				if(!$float_flag)//if parsed value is integer
+					return $frac_part;
+				else{
+					while(($frac_part /= 10) >= 1)
+						;
+					if($int_part < 0 || $neg_flag)
+						$frac_part = -$frac_part;
+					return $int_part + $frac_part;
+				}
+			}
+			$rate *= 10;
+		}
+		return 0;//if error occurs or line ends accidentally
 	}
 	/*****************/
 	
 	/****PARSE********/
 	//parses file's content and returns a array of figures
-	function parse(string $content): array{
+	function parse(array $content): array{
 		$id_item = 0;
 		$sides_item = [];
 		$rad_item = 0;//radius
 		$arr = [];//array with loaded objects
 		$name_item = NULL;//stores class name defined by taken value, 0-Triangle, 1-Rectangle, 2-Circle
+		
 		for($i = 0; $i < count($content); $i++){
 			switch($content[$i]){
-				case '\n'://recreate object
-				
-					//taking last value in line
-					if($name_item !== 2)
-						$sides_item[] = parseval($content, $i - 1);
-					else
-						$rad_item = parseval($content, $i - 1);
+				case "\n"://recreate object
+					($name_item !== 2) ? 
+						$sides_item[] = parseval($content, $i - 1) : 
+						$rad_item = parseval($content, $i - 1);//taking last value in line
 					switch($name_item){
 						case 0:
 							$arr[] = new Triangle($sides_item[0], $sides_item[1], $sides_item[2], $id_item);
@@ -82,16 +115,17 @@
 							$arr[] = new Circle($rad_item, $id_item);
 							break;
 					}
+					
 					$name_item = NULL;
 					$id_item = $rad_item = 0;
 					unset($sides_item);
 					$sides_item = [];
 					break;
 				
-				case '\a'://end of data reached
+				case "\\"://end of data reached
 					return $arr;
 				
-				case ':':
+				case ":":
 					if($content[$i + 1] == ':'){//if true, take figure name
 						switch($content[$i - 1]){
 							case '0':
@@ -108,9 +142,10 @@
 					}
 					else if($content[$i + 1] == ' ')//else take object's ID
 						$id_item = parseval($content, $i - 1);
+						$i++;
 					break;
 				
-				case ','://take value
+				case ","://take value
 					$sides_item[] = parseval($content, $i - 1);
 					break;
 			}
@@ -120,15 +155,13 @@
 	
 	/****LOAD_FILE****/
 	//restores figures from text file, returns a array of figures, or empty string in case of error
-	function load_file(string $filename) : string{//array{
+	function load_file(string $filename) : array{
 		$str = file_get_contents($filename);
 		if(!$str){
 			echo "Error occured while opening or reading the file!\n";
-			//return [];
-			return "";
+			return [];
 		}
-		//return parse($str);
-		return $str;
+		return parse(str_split($str));
 	}
 	/*****************/
 
