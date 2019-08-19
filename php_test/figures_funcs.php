@@ -4,7 +4,7 @@
 
 	/****RAND_FIGURE****/
 	//returns new random figure, or NULL in case of error
-	function rand_figure(){
+	function rand_figure(int $min, int $max){
 		static $id_num = -1;
 		$arr = ["Triangle", "Rectangle", "Circle"];
 		$index = rand(0, count($arr) - 1);
@@ -12,11 +12,11 @@
 		$id_num++;
 		switch($class_name){
 			case "Triangle":
-				return new Triangle(rand(), rand(), rand(0, 179), $id_num);
+				return new Triangle(rand($min, $max), rand($min, $max), rand(0, 179), $id_num);
 			case "Rectangle":
-				return new Rectangle(rand(), rand(), $id_num);
+				return new Rectangle(rand($min, $max), rand($min, $max), $id_num);
 			case "Circle":
-				return new Circle(rand(), $id_num);
+				return new Circle(rand($min, $max), $id_num);
 			default:
 				echo "Unknown class name! Only Triangle, Rectangle and Circle!\n";
 				return NULL;
