@@ -16,4 +16,6 @@
 	}
 	
 	task3(10);
+	rsort($area_array);
+	print_r($area_array);
 
