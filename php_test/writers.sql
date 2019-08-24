@@ -15,7 +15,16 @@ CREATE TABLE book_authors( --links writers and books table
 --
 
 -- load values
-INSERT INTO writers ("writer_id", "author") VALUES(0, "Пехов");
+INSERT INTO writers (writer_id, author) VALUES
+	(0, "Пехов"),
+	(1, "Ложкин"),
+	(2, "Киплинг"),
+	(3, "Данте"),
+	(4, "Пирс");
+INSERT INTO books (book_id, book_name) VALUES
+	;
+INSERT INTO book_authors (link_id, writer_id, book_id) VALUES
+	;
 --
 
 --selecting authors, who has written no more than 6 books
