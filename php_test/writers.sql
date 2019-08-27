@@ -42,7 +42,8 @@ INSERT INTO book_authors (link_id, writer_id, book_id) VALUES
 	(7, 2, 6),
 	(8, 2, 7),
 	(9, 0, 8),
-	(10, 0, 9);
+	(10, 0, 9),
+	(11, 1, 3);
 --
 
 --selecting authors, who has written no more than 6 books
