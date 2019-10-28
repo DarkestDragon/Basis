@@ -2,8 +2,8 @@
 	#include_once 'classes.php';
 	
 	echo "Тестовое задание 1\n";
-	$lval = 0;
-	$rval = 1;
+	$lval = 1;
+	$rval = 2;
 	echo "0 -> 1\n1 -> 2\n";
 	for($i = 3; $i < 65; $i++){
 		$res = $lval + $rval;
